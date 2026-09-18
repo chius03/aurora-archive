@@ -470,12 +470,33 @@ collections['Đáng yêu một chút'] = collections['Lời hứa với chính m
 
   audio.addEventListener('play', updateSoundControl);
   audio.addEventListener('pause', updateSoundControl);
-  const tryAutoplay = () => {
-    audio.play().catch(() => {
-      document.addEventListener('pointerdown', () => audio.play().catch(() => {}), { once: true });
+  const startAudio = async () => {
+    try {
+      await audio.play();
+      updateSoundControl();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const retryOnInteraction = () => {
+    startAudio().then((started) => {
+      if (started) {
+        ['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
+          document.removeEventListener(eventName, retryOnInteraction);
+        });
+      }
     });
   };
-  tryAutoplay();
+
+  startAudio().then((started) => {
+    if (!started) {
+      ['pointerdown', 'touchstart', 'keydown'].forEach((eventName) => {
+        document.addEventListener(eventName, retryOnInteraction, { once: true, passive: true });
+      });
+    }
+  });
   updateSoundControl();
 })();
 </script>

@@ -418,7 +418,7 @@ collections['Đáng yêu một chút'] = collections['Lời hứa với chính m
   });
 })();
 </script>
-<audio id="siteSound" loop preload="metadata">
+<audio id="siteSound" autoplay loop preload="metadata">
   <source src="%C3%A2m%20thanh/%EA%BD%83%EB%82%A0%20Flower%20Day%20%ED%99%A9%EC%A7%84%EC%9D%B4%20Hwang%20Jin%20Yi%20OST%20%EC%84%9C%EC%9B%85%EC%84%9D%20%ED%94%BC%EC%95%84%EB%85%B8%20%EC%BB%A4%EB%B2%84_1.mp3" type="audio/mpeg">
 </audio>
 <button class="sound-control" id="soundControl" type="button" aria-label="Phát nhạc nền" aria-pressed="false">
@@ -456,6 +456,12 @@ collections['Đáng yêu một chút'] = collections['Lời hứa với chính m
 
   audio.addEventListener('play', updateSoundControl);
   audio.addEventListener('pause', updateSoundControl);
+  const tryAutoplay = () => {
+    audio.play().catch(() => {
+      document.addEventListener('pointerdown', () => audio.play().catch(() => {}), { once: true });
+    });
+  };
+  tryAutoplay();
   updateSoundControl();
 })();
 </script>

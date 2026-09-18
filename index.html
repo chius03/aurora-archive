@@ -373,6 +373,7 @@ collections['Đáng yêu một chút'] = collections['Lời hứa với chính m
 </script>
 <script>
 (() => {
+  const sections = document.querySelectorAll('.about, .eras, .quote, .footer');
 
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries, obs) => {

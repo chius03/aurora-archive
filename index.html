@@ -298,6 +298,20 @@ html{scroll-behavior:smooth}
   }
 }
 
+/* Keep gallery images inside the available viewport on every device. */
+.gallery-main{
+  width:auto;
+  max-width:calc(100vw - 84px);
+  max-height:calc(100dvh - 220px);
+  object-fit:contain;
+}
+@media(max-width:640px){
+  .gallery-main{
+    max-width:calc(100vw - 84px);
+    max-height:calc(100dvh - 250px);
+  }
+}
+
 /* Người dùng tắt animation -> giữ trải nghiệm nhẹ */
 @media(prefers-reduced-motion:reduce){
   .hero:after,

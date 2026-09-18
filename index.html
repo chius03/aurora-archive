@@ -311,6 +311,26 @@ html{scroll-behavior:smooth}
     transition:none!important;
   }
 }
+
+/* Keep the visual diary cards separated at every viewport width. */
+.grid{
+  row-gap:clamp(24px,4vw,52px);
+}
+.era:nth-child(even),
+.era:nth-child(even):hover{
+  transform:none;
+}
+.era:hover{
+  transform:translateY(-10px) scale(1.015);
+}
+@media(max-width:900px){
+  .grid{row-gap:24px}
+  .era:hover{transform:translateY(-5px) scale(1.008)}
+}
+@media(max-width:640px){
+  .grid{row-gap:20px}
+  .era:hover{transform:translateY(-3px) scale(1.004)}
+}
 </style>
 
 </head>

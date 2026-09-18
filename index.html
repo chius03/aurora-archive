@@ -331,6 +331,33 @@ html{scroll-behavior:smooth}
   .grid{row-gap:20px}
   .era:hover{transform:translateY(-3px) scale(1.004)}
 }
+
+.sound-control{
+  position:fixed;
+  right:clamp(16px,3vw,30px);
+  bottom:clamp(16px,3vw,30px);
+  z-index:30;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:999px;
+  padding:7px 12px 7px 8px;
+  background:rgba(18,11,31,.82);
+  color:#fff;
+  backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(18,11,31,.18);
+  font:10px var(--mono);
+  letter-spacing:.1em;
+  cursor:pointer;
+  transition:transform .3s ease,background .3s ease,border-color .3s ease;
+}
+.sound-control:hover{transform:translateY(-3px);background:rgba(40,18,56,.94);border-color:var(--gold)}
+.sound-control:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.sound-icon{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--night);font-size:11px}
+.sound-control.is-playing .sound-icon{animation:soundPulse 1.4s ease-in-out infinite}
+@keyframes soundPulse{50%{box-shadow:0 0 0 6px rgba(255,199,129,.16)}}
+@media(max-width:640px){.sound-control{right:16px;bottom:16px}}
 </style>
 
 </head>
@@ -390,5 +417,45 @@ collections['Đáng yêu một chút'] = collections['Lời hứa với chính m
   });
 })();
 </script>
+<audio id="siteSound" loop preload="metadata">
+  <source src="%C3%A2m%20thanh/%EA%BD%83%EB%82%A0%20Flower%20Day%20%ED%99%A9%EC%A7%84%EC%9D%B4%20Hwang%20Jin%20Yi%20OST%20%EC%84%9C%EC%9B%85%EC%84%9D%20%ED%94%BC%EC%95%84%EB%85%B8%20%EC%BB%A4%EB%B2%84_1.mp3" type="audio/mpeg">
+</audio>
+<button class="sound-control" id="soundControl" type="button" aria-label="Phát nhạc nền" aria-pressed="false">
+  <span class="sound-icon" aria-hidden="true">▶</span>
+  <span class="sound-label">PHÁT NHẠC</span>
+</button>
+<script>
+(() => {
+  const audio = document.querySelector('#siteSound');
+  const control = document.querySelector('#soundControl');
+  const icon = control.querySelector('.sound-icon');
+  const label = control.querySelector('.sound-label');
 
+  const updateSoundControl = () => {
+    const isPlaying = !audio.paused;
+    control.classList.toggle('is-playing', isPlaying);
+    control.setAttribute('aria-label', isPlaying ? 'Dừng nhạc nền' : 'Phát nhạc nền');
+    control.setAttribute('aria-pressed', String(isPlaying));
+    icon.textContent = isPlaying ? 'Ⅱ' : '▶';
+    label.textContent = isPlaying ? 'DỪNG NHẠC' : 'PHÁT NHẠC';
+  };
+
+  control.addEventListener('click', async () => {
+    if (audio.paused) {
+      try {
+        await audio.play();
+      } catch (error) {
+        label.textContent = 'KHÔNG PHÁT ĐƯỢC';
+      }
+    } else {
+      audio.pause();
+    }
+    updateSoundControl();
+  });
+
+  audio.addEventListener('play', updateSoundControl);
+  audio.addEventListener('pause', updateSoundControl);
+  updateSoundControl();
+})();
+</script>
 </body></html>
